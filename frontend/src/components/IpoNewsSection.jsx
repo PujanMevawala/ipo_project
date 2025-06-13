@@ -15,15 +15,15 @@ const IpoNewsSection = () => {
   ];
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h2 className="text-3xl font-bold text-gray-800 mb-6">IPO News</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-        {newsItems.map(news => (
-          <div key={news.id} className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-2">{news.title}</h3>
-            <p className="text-sm text-gray-500">{news.date}</p>
-          </div>
-        ))}
+    <div className="container px-4 py-8">
+      <div className="bg-white rounded-lg shadow-md p-6">
+        <h2 className="text-xl font-bold text-gray-800 mb-6">IPO News</h2> 
+          {newsItems.map((news, index) => (
+            <div key={news.id} className={`${index > 0 ? 'mt-2 pt-3' : ''}`}>
+              <h3 className="text-sm font-semibold text-gray-800">{news.title}</h3>
+              <p className="text-xs text-gray-500">{news.date}</p>
+            </div>
+          ))}
       </div>
     </div>
   );

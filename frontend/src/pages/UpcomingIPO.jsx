@@ -8,8 +8,7 @@ import NewListedSection from '../components/NewListedSection';
 import IpoNewsSection from '../components/IpoNewsSection';
 import IpoAnalysisSection from '../components/IpoAnalysisSection';
 import FAQSection from '../components/FAQSection';
-import Footer from '../components/Footer';
-// ... other imports for components will go here
+import DotsIndicator from '../components/DotsIndicator';
 
 const UpcomingIPO = () => {
   return (
@@ -17,16 +16,16 @@ const UpcomingIPO = () => {
       <Navbar />
       <Header />
       <UpcomingSection />
+      <DotsIndicator count={6} activeIndex={0} />
       <DematAccountSection />
       <OngoingSection />
       <NewListedSection />
+      <DotsIndicator count={6} activeIndex={0} />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 container mx-auto px-4 py-8">
         <IpoNewsSection />
         <IpoAnalysisSection />
       </div>
       <FAQSection />
-      <Footer />
-      {/* Other components will be placed here */}
     </div>
   );
 };

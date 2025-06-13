@@ -52,26 +52,28 @@ const FAQSection = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h2 className="text-3xl font-bold text-gray-800 mb-6">Frequently Asked Questions?</h2>
-      <p className="text-gray-600 mb-8">Find answers to common questions that come in your mind related to IPO.</p>
+      <div className="max-w-6xl mx-auto">
+        <h2 className="text-2xl font-semibold text-gray-800 mb-2">Frequently Asked Questions?</h2>
+        <p className="text-base text-gray-600 mb-8">Find answers to common questions that come in your mind related to IPO.</p>
 
-      <div className="space-y-4">
-        {faqs.map((faq, index) => (
-          <div key={faq.id} className="bg-white rounded-lg shadow-md p-6">
-            <button
-              className="flex justify-between items-center w-full text-left font-semibold text-gray-800"
-              onClick={() => toggleFAQ(index)}
-            >
-              {faq.question}
-              <span className="text-blue-600 text-2xl">
-                {openIndex === index ? '-' : '+'}
-              </span>
-            </button>
-            {openIndex === index && (
-              <p className="mt-4 text-gray-600">{faq.answer}</p>
-            )}
-          </div>
-        ))}
+        <div className="space-y-4">
+          {faqs.map((faq, index) => (
+            <div key={faq.id} className="bg-white rounded-lg shadow-md p-6">
+              <button
+                className="flex justify-between items-center w-full text-left font-semibold text-gray-800 text-lg"
+                onClick={() => toggleFAQ(index)}
+              >
+                <span className="pr-4">{faq.question}</span>
+                <span className="text-blue-600 text-3xl flex-shrink-0">
+                  {openIndex === index ? '-' : '+'}
+                </span>
+              </button>
+              {openIndex === index && (
+                <p className="mt-4 text-base text-gray-600">{faq.answer}</p>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

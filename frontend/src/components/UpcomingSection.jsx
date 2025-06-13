@@ -38,14 +38,14 @@ const UpcomingSection = () => {
   ];
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-3xl font-bold text-gray-800">Upcoming</h2>
-        <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md">View All</button>
+    <div className="container mx-auto px-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <p className="sm:text-xl text-gray-800 ">Upcoming</p>
+        <button className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md">View All</button>
       </div>
-      <p className="text-gray-600 mb-6">Companies that have filed for an IPO with SEBI. Raw details might be disclosed by the companies later on.</p>
+      <p className="text-gray-600 mb-16 text-sm sm:text-base mt-1">Companies that have filed for an IPO with SEBI. Raw details might be disclosed by the companies later on.</p>
 
-      <div className="flex overflow-x-auto space-x-6 pb-4 scrollbar-hide">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {upcomingIpos.map(ipo => (
           <IpoCard key={ipo.id} ipo={ipo} />
         ))}
@@ -56,12 +56,12 @@ const UpcomingSection = () => {
 
 export const IpoCard = ({ ipo }) => {
   return (
-    <div className="flex-none w-96 bg-white rounded-lg shadow-md p-6">
+    <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
       <div className="mb-4">
-        <h3 className={`text-xl font-semibold ${ipo.priceBand === 'Not Issued' ? 'text-gray-800' : 'text-blue-600'}`}>{ipo.name}</h3>
+        <h3 className={`text-lg sm:text-xl font-semibold ${ipo.priceBand === 'Not Issued' ? 'text-gray-800' : 'text-blue-600'}`}>{ipo.name}</h3>
         {ipo.logo && <img src={ipo.logo} alt={`${ipo.name} Logo`} className="h-8 mt-2" />}
       </div>
-      <div className="grid grid-cols-2 gap-y-2 text-sm text-gray-600 mb-6">
+      <div className="grid grid-cols-2 gap-y-2 text-xs sm:text-sm text-gray-600 mb-6">
         <div><span className="text-gray-500">PRICE BAND</span><br /><span className="font-semibold">{ipo.priceBand}</span></div>
         <div><span className="text-gray-500">OPEN</span><br /><span className="font-semibold">{ipo.openDate}</span></div>
         <div><span className="text-gray-500">ISSUE SIZE</span><br /><span className="font-semibold">{ipo.issueSize}</span></div>
@@ -70,8 +70,8 @@ export const IpoCard = ({ ipo }) => {
         <div><span className="text-gray-500">LISTING DATE</span><br /><span className="font-semibold">{ipo.listingDate}</span></div>
       </div>
       <div className="flex space-x-3">
-        <button className={`border border-gray-300 px-4 py-2 rounded-md ${ipo.priceBand === 'Not Issued' ? 'bg-gray-100 text-gray-600' : 'bg-blue-100 text-blue-700'}`}>RHP</button>
-        <button className={`border border-gray-300 px-4 py-2 rounded-md ${ipo.closeDate === 'Not Issued' ? 'bg-gray-100 text-gray-600' : 'bg-blue-100 text-blue-700'}`}>DRHP</button>
+        <button className={`flex-1 border border-gray-300 px-3 sm:px-4 py-2 rounded-md text-sm ${ipo.priceBand === 'Not Issued' ? 'bg-gray-100 text-gray-600' : 'bg-blue-100 text-blue-700'}`}>RHP</button>
+        <button className={`flex-1 border border-gray-300 px-3 sm:px-4 py-2 rounded-md text-sm ${ipo.closeDate === 'Not Issued' ? 'bg-gray-100 text-gray-600' : 'bg-blue-100 text-blue-700'}`}>DRHP</button>
       </div>
     </div>
   );

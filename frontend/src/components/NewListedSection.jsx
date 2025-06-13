@@ -4,14 +4,14 @@ const NewListedSection = () => {
   const newListedIpos = [
     {
       id: 1,
-      logo: '/jyoti-cnc-logo.png', // Placeholder for logo
-      name: 'Jyoti CNC Automation Ltd.',
-      ipoPrice: 'Rs 331',
-      listingPrice: 'Rs 370',
-      listingGain: '11.78%',
-      listingDate: '2024-01-16',
-      cmp: 'Rs 455.75',
-      currentReturn: '37.69%',
+      logo: '/zomato-logo.png', // Placeholder for logo
+      name: 'Zomato Ltd.',
+      ipoPrice: 'Rs 76',
+      listingPrice: 'Rs 115',
+      listingGain: '51.32%',
+      listingDate: '2021-07-23',
+      cmp: 'Rs 142.75',
+      currentReturn: '87.83%',
     },
     {
       id: 2,
@@ -39,13 +39,13 @@ const NewListedSection = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
         <h2 className="text-3xl font-bold text-gray-800">New Listed</h2>
         <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md">View All</button>
       </div>
-      <p className="text-gray-600 mb-6">Companies that have been listed recently through an IPO. Find their listing gains and returns here.</p>
+      <p className="text-gray-600 mb-6 text-sm sm:text-base">Companies that have been listed recently through an IPO. Find their listing gains and returns here.</p>
 
-      <div className="flex overflow-x-auto space-x-6 pb-4 scrollbar-hide">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {newListedIpos.map(ipo => (
           <NewListedCard key={ipo.id} ipo={ipo} />
         ))}
@@ -56,22 +56,22 @@ const NewListedSection = () => {
 
 const NewListedCard = ({ ipo }) => {
   return (
-    <div className="flex-none w-80 bg-white rounded-lg shadow-md p-6">
+    <div className="bg-white rounded-lg shadow-md p-6">
       <div className="flex items-center mb-4">
         <img src={ipo.logo} alt={`${ipo.name} Logo`} className="h-12 mr-4" />
-        <h3 className="text-xl font-semibold text-gray-800">{ipo.name}</h3>
+        <h3 className="text-xl font-semibold text-blue-600">{ipo.name}</h3>
       </div>
-      <div className="grid grid-cols-2 gap-y-2 text-sm text-gray-600 mb-6">
-        <div><span className="font-medium">IPO PRICE</span><br />{ipo.ipoPrice}</div>
-        <div><span className="font-medium">LISTING PRICE</span><br />{ipo.listingPrice}</div>
-        <div><span className="font-medium">LISTING GAIN</span><br />{ipo.listingGain}</div>
-        <div><span className="font-medium">LISTING DATE</span><br />{ipo.listingDate}</div>
-        <div><span className="font-medium">CMP</span><br />{ipo.cmp}</div>
-        <div><span className="font-medium">CURRENT RETURN</span><br />{ipo.currentReturn}</div>
+      <div className="grid grid-cols-3 gap-y-2 text-sm text-gray-600 mb-6">
+        <div><span className="text-gray-500">IPO PRICE</span><br /><span className="font-semibold text-gray-800">{ipo.ipoPrice}</span></div>
+        <div><span className="text-gray-500">LISTING PRICE</span><br /><span className="font-semibold text-gray-800">{ipo.listingPrice}</span></div>
+        <div><span className="text-gray-500">LISTING GAIN</span><br /><span className="font-semibold text-gray-800">{ipo.listingGain}</span></div>
+        <div><span className="text-gray-500">LISTING DATE</span><br /><span className="font-semibold text-gray-800">{ipo.listingDate}</span></div>
+        <div><span className="text-gray-500">CMP</span><br /><span className="font-semibold text-gray-800">{ipo.cmp}</span></div>
+        <div><span className="text-gray-500">CURRENT RETURN</span><br /><span className="font-semibold text-gray-800">{ipo.currentReturn}</span></div>
       </div>
       <div className="flex space-x-3">
-        <button className="border border-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-100">RHP</button>
-        <button className="border border-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-100">DRHP</button>
+        <button className="flex-1 bg-blue-100 text-blue-700 px-4 py-2 rounded-md hover:bg-blue-200 transition-colors">RHP</button>
+        <button className="flex-1 bg-blue-100 text-blue-700 px-4 py-2 rounded-md hover:bg-blue-200 transition-colors">DRHP</button>
       </div>
     </div>
   );

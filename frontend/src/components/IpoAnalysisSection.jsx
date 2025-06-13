@@ -21,15 +21,16 @@ const IpoAnalysisSection = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h2 className="text-3xl font-bold text-gray-800 mb-6">IPO Analysis</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-        {analysisItems.map(analysis => (
-          <div key={analysis.id} className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-2">{analysis.title}</h3>
-            <p className="text-sm text-gray-500">{analysis.date}</p>
-          </div>
-        ))}
-      </div>
+       <div className="bg-white rounded-lg shadow-md p-6">
+        <h2 className="text-xl font-bold text-gray-800 mb-6">IPO Analysis</h2>
+       
+          {analysisItems.map((analysis, index) => (
+            <div key={analysis.id} className={`${index > 0 ? 'mt-2 pt-3 ' : ''}`}>
+              <h3 className="text-sm font-semibold text-gray-800 ">{analysis.title}</h3>
+              <p className="text-xs text-gray-500">{analysis.date}</p>
+            </div>
+          ))}
+        </div>
     </div>
   );
 };
