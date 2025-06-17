@@ -3,10 +3,14 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const { Pool } = require('pg');
+const { OAuth2Client } = require('google-auth-library');
 require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 5001;
+
+// Initialize Google OAuth client
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const pool = new Pool(
     {
@@ -25,26 +29,38 @@ pool.connect((err, client, release) => {
     release();
 })
 
-app.use(cors());
+app.use(cors({
+  origin: ['http://localhost:5173', 'http://localhost:3000'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 
+// Test endpoint
+app.get('/test', (req, res) => {
+  res.json({ message: 'Backend server is running!' });
+});
 
 //Routes
 
 //user signup
 app.post('/signup', async (req, res) => {
     const { name, email, password } = req.body;
+    console.log('Signup request received:', { name, email, password: '[REDACTED]' });
     try {
         const existingUser = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
         if (existingUser.rows.length > 0) {
+            console.warn('Signup failed: User with this email already exists.', email);
             return res.status(400).json({
                 message: 'User with this email already exists'
             });
         }
 
         const hashed_password = await bcrypt.hash(password, 10);
-
+        console.log('Attempting to insert new user:', { name, email, password: '[HASHED_REDACTED]' });
         const newUser = await pool.query('INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING id, name, email', [name, email, hashed_password]);
+        console.log('New user inserted into DB:', newUser.rows[0]);
         const token = jwt.sign({ id: newUser.rows[0].id, email: newUser.rows[0].email }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
         res.status(201).json({
@@ -104,7 +120,75 @@ app.post('/signin', async (req, res) => {
             message: 'Server error during signin'
         });
     }
-})
+});
+
+// Google OAuth signin
+app.post('/google-signin', async (req, res) => {
+    const { token, userInfo } = req.body;
+    
+    try {
+        console.log('Google Signin: Received token (redacted):', token ? '[RECEIVED]' : '[NONE]');
+        console.log('Google Signin: Received user info:', userInfo);
+        
+        if (!userInfo || !userInfo.email) {
+            console.error('Google Signin Error: Invalid user information from Google', userInfo);
+            return res.status(400).json({
+                message: 'Invalid user information from Google'
+            });
+        }
+        
+        const { email, name, picture } = userInfo;
+        console.log('Google Signin: Processing user:', { email, name, picture });
+        
+        // Check if user exists
+        console.log('Google Signin: Checking if user exists with email:', email);
+        let user = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+        
+        if (user.rows.length === 0) {
+            console.log('Google Signin: User not found, attempting to create new user.');
+            // Create new user if doesn't exist
+            const newUser = await pool.query(
+                'INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING id, name, email',
+                [name, email, 'google_oauth_user'] // Set a placeholder password for Google users
+            );
+            user = newUser;
+            console.log('Google Signin: Created new user for Google OAuth:', user.rows[0]);
+        } else {
+            console.log('Google Signin: Found existing user for Google OAuth:', user.rows[0]);
+        }
+        
+        // Generate JWT token
+        const jwtToken = jwt.sign(
+            {
+                id: user.rows[0].id,
+                email: user.rows[0].email
+            },
+            process.env.JWT_SECRET,
+            {
+                expiresIn: '1hr'
+            }
+        );
+        
+        res.status(200).json({
+            message: 'Google signin successful',
+            user: {
+                id: user.rows[0].id,
+                name: user.rows[0].name,
+                email: user.rows[0].email,
+                picture: picture
+            },
+            token: jwtToken
+        });
+        
+    } catch (error) {
+        console.error('Google Signin Error: ', error.message);
+        console.error('Google Signin Full error:', error);
+        res.status(500).json({
+            message: 'Server error during Google signin',
+            error: error.message
+        });
+    }
+});
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

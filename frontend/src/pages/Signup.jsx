@@ -6,11 +6,15 @@ function Signup() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { signup } = useAuth();
+  const { signup, googleSignin } = useAuth();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     signup(name, email, password);
+  };
+
+  const handleGoogleSignin = () => {
+    googleSignin();
   };
 
   return (
@@ -23,6 +27,8 @@ function Signup() {
             <input
               type="text"
               id="name"
+              name="name"
+              autoComplete="name"
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -33,6 +39,8 @@ function Signup() {
             <input
               type="email"
               id="email"
+              name="email"
+              autoComplete="email"
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -43,10 +51,11 @@ function Signup() {
             <input
               type="password"
               id="password"
+              name="password"
+              autoComplete="new-password"
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline pr-10"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              autoComplete="new-password"
             />
             {password && (
               <span className="absolute inset-y-0 right-0 pr-3 flex items-center pt-6 text-gray-600 cursor-pointer">
@@ -80,6 +89,7 @@ function Signup() {
           </div>
           <button
             type="button"
+            onClick={handleGoogleSignin}
             className="w-full bg-gray-200 hover:bg-gray-300 border border-gray-300 text-gray-700 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline flex items-center justify-center"
           >
             <img src="/google-icon.svg" alt="Google icon" className="w-5 h-5 mr-2" />

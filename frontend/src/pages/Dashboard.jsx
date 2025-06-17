@@ -1,7 +1,10 @@
 import React from 'react';
 import Layout from '../components/Layout';
+import { useAuth } from '../AuthContext';
 
 function Dashboard() {
+  const { user } = useAuth();
+
   return (
     <Layout>
       <div className="container mx-auto p-8 pt-4">
