@@ -4,12 +4,13 @@ const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const { Pool } = require('pg');
 const { OAuth2Client } = require('google-auth-library');
+const { Sequelize } = require('sequelize');
+const path = require('path');
 require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 5001;
 
-// Initialize Google OAuth client
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const pool = new Pool(
@@ -21,6 +22,19 @@ const pool = new Pool(
         port: process.env.DB_PORT
     }
 )
+
+// Serve uploads folder statically
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Import models and sync
+const db = require('./models');
+
+// Sequelize authentication and sync
+db.sequelize.authenticate()
+  .then(() => console.log('PostgreSQL connected!'))
+  .then(() => db.sequelize.sync({ alter: true }))
+  .then(() => console.log('Sequelize models synced with database.'))
+  .catch(err => console.error('Sequelize connection/sync error:', err));
 
 pool.connect((err, client, release) => {
     if (err)
@@ -36,6 +50,7 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Test endpoint
 app.get('/test', (req, res) => {
@@ -189,6 +204,10 @@ app.post('/google-signin', async (req, res) => {
         });
     }
 });
+
+app.use('/api/companies', require('./routes/company'));
+app.use('/api/ipos', require('./routes/ipo'));
+app.use('/api/documents', require('./routes/document'));
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
